@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-app
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecommerce
+  template:
+    metadata:
+      labels:
+        app: ecommerce
+    spec:
+      containers:
+        - name: ecommerce
+          image: 851725271496.dkr.ecr.us-west-1.amazonaws.com/inafs/e-comm:new
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://ecommerce-db.chko8wqssgqe.us-west-1.rds.amazonaws.com:3306/ecommercedb?useSSL=false&serverTimezone=UTC"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "admin"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "Abcd1234!"
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"
+            - name: SPRING_LOG_LEVEL
+              value: "DEBUG"
+#          readinessProbe:
+#            httpGet:
+#              path: /actuator/health
+#              port: 8080
+#            initialDelaySeconds: 60
+#            periodSeconds: 5
+#          livenessProbe:
+#            httpGet:
+#              path: /actuator/health
+#              port: 8080
+#            initialDelaySeconds: 90
+#            periodSeconds: 5
+#          resources:
+#            limits:
+#              memory: "512Mi"
+#              cpu: "500m"
+#            requests:
+#              memory: "256Mi"
+#              cpu: "250m"
